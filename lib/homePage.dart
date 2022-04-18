@@ -10,9 +10,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final formKey=GlobalKey<FormState>();
-  TextEditingController fname=TextEditingController();
-  TextEditingController lname=TextEditingController();
+  TextEditingController _fname=TextEditingController();
+  TextEditingController _lname=TextEditingController();
+  late Dialog dialog;
+  @override
+  void dispose() {
 
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         {
        showBottom();
         },
-            child: Text("Show Bottom Sheet")),
+            child: Text("Add Contact to your phone")),
       ),
     );
   }
@@ -30,33 +35,36 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         height: 250,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(
 
-          children: [
-            ListTile(
-              title: Text("First Person"),
-              subtitle: Text(fname.text+'\t'+lname.text ),
-              leading: Icon(Icons.person),
-              trailing:GestureDetector(
-                onTap: () {
-                  showdialog();
-                },
-                  child: Icon(Icons.edit)
-              )
-            ),
-            ListTile(
-              title: Text("Second Person"),
-              subtitle: Text(fname.text+'\t'+lname.text),
-              leading: Icon(Icons.person),
+            mainAxisAlignment: MainAxisAlignment.start,
+
+            children: [
+              ListTile(
+
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_fname.text,style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87
+                    ),),
+                    Text(_lname.text),
+                  ],
+                ),
+                leading: Icon(Icons.person,color: Colors.black,),
                 trailing:GestureDetector(
-                    onTap: () {
-                      showdialog();
-                    },
-                    child: Icon(Icons.edit)
+                  onTap: () {
+                    showdialog();
+                  },
+                    child: Icon(Icons.add,color: Colors.black,)
                 )
-            ),
-          ],
+              ),
+
+            ],
+          ),
         ),
       );
     });
@@ -73,6 +81,7 @@ class _HomePageState extends State<HomePage> {
             width: double.maxFinite,
             height: 250,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -88,21 +97,25 @@ class _HomePageState extends State<HomePage> {
                           }
                         },*/
                         keyboardType: TextInputType.text,
-                        controller: fname,
+                        controller: _fname,
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            labelText: "Enter Fast Name",
-                            hintText: "Enter your Fast Name",
-                            /*  errorText: _validate ? 'Number Can\'t Be Empty' : null,*/
-                            contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey)
+                          filled: true,
+                            fillColor: Colors.orange[50],
+                            prefixIcon: Icon(
+                                Icons.person,
+                              color: Colors.black54,
                             ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey)
-                            )
+                            hintText: "Enter Your Name",
+                            /*  errorText: _validate ? 'Number Can\'t Be Empty' : null,*/
+                             contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
+                             enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Colors.white)
+                            ),
+                           focusedBorder: OutlineInputBorder(
+                               borderRadius: BorderRadius.circular(10),
+                               borderSide: BorderSide(color: Colors.white)
+                           )
                         ),
                       ),
                       SizedBox(height: 10,),
@@ -113,27 +126,32 @@ class _HomePageState extends State<HomePage> {
                             return "Enter a valid email Address";
                           }
                         },*/
-                        keyboardType: TextInputType.text,
-                         controller: lname,
+                        keyboardType: TextInputType.number,
+                         controller: _lname,
+
                         decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            labelText: "Enter Last Name",
-                            hintText: "Enter your Last Name",
+                            filled: true,
+                            fillColor: Colors.orange[50],
+
+                            prefixIcon: Icon(Icons.person,
+                              color: Colors.black54,),
+                            hintText: "Enter Your Number",
+
                             /*  errorText: _validate ? 'Number Can\'t Be Empty' : null,*/
                             contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
                             enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(color: Colors.grey)
                             ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey)
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Colors.white)
                             )
                         ),
                       ),
                       SizedBox(height: 10,),
                       MaterialButton(onPressed: (){
-                        gotoNextPage(fname.text,lname.text);
+                        gotoNextPage(_fname.text,_lname.text);
                       },
                         color: Colors.orange,
                         elevation: 0,
@@ -155,6 +173,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void gotoNextPage(String text, String text2) {
+    Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(fastname: text,lastname: text2 ),
     ),
     );

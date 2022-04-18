@@ -15,8 +15,17 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+
+            },
+          )
+      ),
       body: Center(
-        child: Text("Fast name is: ${widget.fastname}\nLast name is: ${widget.lastname}\nName is: ${widget.fastname} "+" ${widget.lastname}"),
+        child: Text("Your Name is: ${widget.fastname}\nYour Number is: ${widget.lastname}"),
       ),
     );
   }
